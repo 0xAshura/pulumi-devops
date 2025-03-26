@@ -5,7 +5,7 @@
         "typescript": "^5.0.0"
     },
     "dependencies": {
-        "@pulumi/aws": "^6.0.2",
+        "@pulumi/aws": "^3.0.0",
         "@pulumi/synced-folder": "^0.0.9",
         "@pulumi/pulumi": "^3.113.0"
     }
