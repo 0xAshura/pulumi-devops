@@ -26,7 +26,7 @@ jobs:
       - uses: pulumi/actions@v5
         with:
           command: up
-          stack-name: 0xashura/lab8/mihir-lab8-Mihir
+          stack-name: 0xashura/lab8/mihir-lab8
           work-dir: ./infra
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
