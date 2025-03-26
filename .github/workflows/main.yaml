@@ -25,6 +25,9 @@ jobs:
 
       - name: Navigate to infra directory
         run: cd infra
+
+      - name: Generate Pulumi Project
+        run: pulumi new static-website-aws-typescript --dir infra --template-mode --stack mihir-lab8 --name lab8 --yes --non-interactive  
       
       - name: Set Pulumi AWS profile
         run: pulumi config set aws:profile myprofile  
