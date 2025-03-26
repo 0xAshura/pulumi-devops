@@ -23,7 +23,13 @@ jobs:
         working-directory: ./infra
         run: npm install
 
-      - uses: pulumi/actions@v5
+      - name: Acquire lock
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 30
+
+      - name: Run Pulumi Update
+        uses: pulumi/actions@v5
         with:
           command: up
           stack-name: 0xashura/lab8-mihir/lab8-100938484
