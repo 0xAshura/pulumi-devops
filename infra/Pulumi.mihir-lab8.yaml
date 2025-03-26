@@ -1,0 +1,6 @@
+config:
+  aws:region: us-east-1
+  lab8:errorDocument: error.html
+  lab8:indexDocument: index.html
+  lab8:path: ./www
+  aws:profile: myprofile
