@@ -23,6 +23,9 @@ jobs:
         working-directory: ./infra
         run: npm install
 
+      - name: Navigate to infra directory
+        run: cd infra
+      
       - name: Set Pulumi AWS profile
         run: pulumi config set aws:profile myprofile  
 
