@@ -1,4 +1,4 @@
-name: lab8
+name: lab8-mihir
 description: A TypeScript program to deploy a static website on AWS
 runtime:
   name: nodejs
