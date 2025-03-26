@@ -5,6 +5,7 @@ runtime:
   options:
     packagemanager: npm
 config:
+  aws:profile: myprofile
   pulumi:tags:
     value:
       pulumi:template: static-website-aws-typescript
