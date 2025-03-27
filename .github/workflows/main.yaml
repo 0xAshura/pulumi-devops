@@ -1,37 +1,51 @@
-name: main
-
+name: Pulumi Deployment
+ 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
-
+permissions:
+  id-token: write  # Required for OIDC authentication
+  contents: read   # Required to read repository contents
+ 
 jobs:
-  pulumi-up:
-    name: pulumi-up
+  deploy:
     runs-on: ubuntu-latest
+ 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js 18
-        uses: actions/setup-node@v4
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      - name: Install Pulumi CLI
+        uses: pulumi/actions@v4
         with:
-          node-version: 18
-
-      - name: Install Dependencies
-        working-directory: ./infra
+         pulumi-version: latest
+ 
+      # Set up AWS credentials using OIDC
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          web-identity-token-file: ${{ secrets.AWS_WEB_IDENTITY_TOKEN_FILE }}
+          aws-region: us-east-1
+          role-session-name: GitHubActionsSession
+     
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+     
+      - name: Set up Pulumi Access Token
+        run: |
+          echo "PULUMI_ACCESS_TOKEN=${{ secrets.PULUMI_ACCESS_TOKEN }}" >> $GITHUB_ENV    
+     
+      # Install dependencies (e.g., if using TypeScript, npm install)
+      - name: Install dependencies
         run: npm install
-
-      - uses: pulumi/actions@v5
-        with:
-          command: destroy
-          stack-name: 0xashura/lab8-mihir/lab8-100938484
-          work-dir: ./infra
+      - name: Select Pulumi Stack
+        run: pulumi stack select dev
+ 
+      # Deploy with Pulumi
+      - name: Deploy resources using Pulumi
+        run: pulumi up --yes
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          # If you do not have Pulumi ESC configured then uncomment: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
