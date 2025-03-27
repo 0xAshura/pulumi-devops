@@ -45,8 +45,10 @@ jobs:
       # Install dependencies (e.g., if using TypeScript, npm install)
       - name: Install dependencies
         run: npm install
+        working-directory: infra
       - name: Select Pulumi Stack
         run: pulumi stack select dev
+        working-directory: infra     
 
       # Deploy with Pulumi
       - name: Deploy resources using Pulumi
