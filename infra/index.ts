@@ -2,7 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
  
 // Create the S3 bucket with website configuration
-const bucket = new aws.s3.Bucket("upadhyay-site", {
+const bucket = new aws.s3.Bucket("mihir-site", {
     website: {
         indexDocument: "index.html",
     },
@@ -11,7 +11,7 @@ const bucket = new aws.s3.Bucket("upadhyay-site", {
 // Upload the index.html file to the bucket
 new aws.s3.BucketObject("index", {
     bucket: bucket,
-    content: "<html><h1>Hello, Nilay from Pulumi!</h1></html>",
+    content: "<html><h1>Hello, Mihir from Pulumi!</h1></html>",
     key: "index.html",
     contentType: "text/html",
 });
