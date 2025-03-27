@@ -45,14 +45,14 @@ jobs:
       # Install dependencies (e.g., if using TypeScript, npm install)
       - name: Install dependencies
         run: npm install
-        working-directory: infra
+        working-directory: ./infra
       - name: Select Pulumi Stack
         run: pulumi stack select lab8-100938484
-        working-directory: infra     
+        working-directory: ./infra     
 
       # Deploy with Pulumi
       - name: Deploy resources using Pulumi
         run: pulumi up --cwd infra --yes
-        working-directory: infra
+        working-directory: ./infra
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
