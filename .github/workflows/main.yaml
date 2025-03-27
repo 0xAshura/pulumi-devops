@@ -40,7 +40,7 @@ jobs:
      
       # Change to the infra directory
       - name: Change to infra directory
-        run: cd pulumi-devops/infra
+        run: cd pulumi-devops/tree/main/infra
 
       # Install dependencies (e.g., if using TypeScript, npm install)
       - name: Install dependencies
