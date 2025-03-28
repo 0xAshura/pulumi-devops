@@ -1,0 +1,60 @@
+name: Pulumi Destroy Resources
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write  # Required for OIDC authentication
+  contents: read   # Required to read repository contents
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Pulumi CLI
+        uses: pulumi/actions@v4
+        with:
+          pulumi-version: latest
+
+      # Set up AWS credentials using OIDC
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          web-identity-token-file: ${{ secrets.AWS_WEB_IDENTITY_TOKEN_FILE }}
+          aws-region: us-east-1
+          role-session-name: GitHubActionsSession
+
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+
+      - name: Set up Pulumi Access Token
+        run: |
+          echo "PULUMI_ACCESS_TOKEN=${{ secrets.PULUMI_ACCESS_TOKEN }}" >> $GITHUB_ENV
+
+      # Change to the infra directory
+      - name: Change to infra directory
+        run: cd infra
+
+      # Install dependencies (e.g., if using TypeScript, npm install)
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./infra
+
+      - name: Select Pulumi Stack
+        run: pulumi stack select lab8-100938484
+        working-directory: ./infra
+
+      # Destroy resources with Pulumi
+      - name: Destroy resources using Pulumi
+        run: pulumi destroy --yes
+        working-directory: ./infra
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
