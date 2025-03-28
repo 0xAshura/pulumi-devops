@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'infra/**'
 permissions:
   id-token: write  # Required for OIDC authentication
   contents: read   # Required to read repository contents
