@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - 'destroy/**'  # Only trigger when changes occur in the destroy directory
 permissions:
   id-token: write  # Required for OIDC authentication
   contents: read   # Required to read repository contents
@@ -51,6 +52,17 @@ jobs:
       - name: Select Pulumi Stack
         run: pulumi stack select lab8-100938484
         working-directory: ./infra
+
+      # Check for ongoing operations
+      - name: Check for ongoing operations
+        run: |
+          if pulumi stack output ongoingOperation; then
+            echo "Ongoing operation detected, aborting."
+            exit 1
+          fi
+        working-directory: ./infra
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
       # Destroy resources with Pulumi
       - name: Destroy resources using Pulumi
